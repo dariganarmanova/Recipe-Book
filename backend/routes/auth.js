@@ -1,5 +1,5 @@
 const express = require('express');
-const { User } = require('./models/user');
+const { User } = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs'); // For hashing passwords
 const router = express.Router();
