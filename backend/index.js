@@ -2,6 +2,7 @@ const express = require('express');
 const { connectToDatabase } = require('./db/mongoose');
 const cors = require('cors');
 const auth = require('./routes/auth');
+const recipeRoutes = require('./routes/recipeRoute');
 
 const app = express();
 app.use(express.json());
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api', auth);
+app.use('/', recipeRoutes);
 
 
 app.listen(8002, () => {

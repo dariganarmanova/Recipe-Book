@@ -16,7 +16,7 @@ router.get('/recipe/:userId', async (req, res) => {
 router.post('/recipe', async (req, res) => {
     const { userId, ingredients } = req.body;
     const newRecipe = new Recipe({
-        userId,
+        user: userId,
         ingredients
     });
     try {
@@ -57,3 +57,5 @@ router.put('/recipe/:id', async (req, res) => {
         res.status(500).json({ message: "Error updating the item", error });
     }
 });
+
+module.exports = router;
