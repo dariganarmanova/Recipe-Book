@@ -3,31 +3,32 @@ const { Recipe } = require('../models/recipe');
 const { RouterContext } = require('next/dist/shared/lib/router-context.shared-runtime');
 const router = express.Router();
 
-router.get('/recipe/:userId', async (req, res) => {
+router.get('/:userId', async (req, res) => {
     const { userId } = req.params;
     try {
         const recipes = await Recipe.find({ userId });
         res.status(200).json(recipes);
     } catch (error) {
-        res.status(500).json({ message: "Error retrieving the items", error })
+        res.status(500).json({ message: "Cannot get the item", error });
     }
 });
 
-router.post('/recipe', async (req, res) => {
+router.post('/', async (req, res) => {
     const { userId, ingredients } = req.body;
-    const newRecipe = new Recipe({
+    const newIngredient = new Recipe({
         user: userId,
         ingredients
     });
     try {
-        const saveRecipe = await newRecipe.save();
-        res.status(201).json(saveRecipe);
+        console.log("Request body:", req.body);
+        const savedIngredient = await newIngredient.save();
+        res.status(201).json(savedIngredient);
     } catch (error) {
-        res.status(500).json({ message: "Error creating a new recipe", error })
+        res.status(500).json({ message: "Couln't create the item", error });
     }
-});
+})
 
-router.delete('/recipe/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const deletedItem = await Recipe.findByIdAndDelete(req.params.id);
         if (!deletedItem) {
@@ -40,7 +41,7 @@ router.delete('/recipe/:id', async (req, res) => {
     }
 });
 
-router.put('/recipe/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
     const { id } = req.params;
     const { ingredients } = req.body;
     try {
