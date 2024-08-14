@@ -3,7 +3,7 @@ const { Recipe } = require('../models/recipe');
 const { RouterContext } = require('next/dist/shared/lib/router-context.shared-runtime');
 const router = express.Router();
 
-router.get('/home', async (req, res) => {
+router.get('/:userId', async (req, res) => {
     const { userId } = req.params;
     try {
         const recipes = await Recipe.find({ userId });
@@ -16,11 +16,10 @@ router.get('/home', async (req, res) => {
 router.post('/home', async (req, res) => {
     const { userId, ingredients } = req.body;
     const newIngredient = new Recipe({
-        user: userId,
+        userId,
         ingredients
     });
     try {
-        console.log("Request body:", req.body);
         const savedIngredient = await newIngredient.save();
         res.status(201).json(savedIngredient);
     } catch (error) {
@@ -28,7 +27,7 @@ router.post('/home', async (req, res) => {
     }
 })
 
-router.delete('/home', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const deletedItem = await Recipe.findByIdAndDelete(req.params.id);
         if (!deletedItem) {
@@ -41,10 +40,10 @@ router.delete('/home', async (req, res) => {
     }
 });
 
-router.put('/home', async (req, res) => {
-    const { id } = req.params;
-    const { ingredients } = req.body;
+router.put('/:id', async (req, res) => {
     try {
+        const { id } = req.params;
+        const { ingredients } = req.body;
         const updatedRecipe = await Recipe.findByIdAndUpdate(
             id,
             { ingredients },
