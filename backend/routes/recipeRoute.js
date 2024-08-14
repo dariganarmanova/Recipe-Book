@@ -3,7 +3,7 @@ const { Recipe } = require('../models/recipe');
 const { RouterContext } = require('next/dist/shared/lib/router-context.shared-runtime');
 const router = express.Router();
 
-router.get('/:userId', async (req, res) => {
+router.get('/home', async (req, res) => {
     const { userId } = req.params;
     try {
         const recipes = await Recipe.find({ userId });
@@ -13,7 +13,7 @@ router.get('/:userId', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/home', async (req, res) => {
     const { userId, ingredients } = req.body;
     const newIngredient = new Recipe({
         user: userId,
@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/home', async (req, res) => {
     try {
         const deletedItem = await Recipe.findByIdAndDelete(req.params.id);
         if (!deletedItem) {
@@ -41,7 +41,7 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/home', async (req, res) => {
     const { id } = req.params;
     const { ingredients } = req.body;
     try {

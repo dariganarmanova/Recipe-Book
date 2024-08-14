@@ -1,30 +1,38 @@
 const express = require('express');
-const { UserModel } = require('../models/user');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs'); // For hashing passwords
+const { User } = require('../models/user');
 const router = express.Router();
 
 router.post('/signin', async (req, res) => {
-    UserModel.create(req.body)
-        .then(User => res.json(User))
-        .catch(error => res.json(error))
+    const { email, password } = req.body;
+    try {
+        const existingUser = await User.findOne({ email })
+        if (existingUser) {
+            return res.json("User already exists");
+        }
+        const newUser = new User({ email, password });
+        const savedUser = await newUser.save();
+        return res.status(201).json({ userId: savedUser._id })
+    }
+    catch (error) {
+        console.error(e);
+        return res.status(500).json(err);
+    }
 });
 
 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    UserModel.findOne({ email: email })
-        .then(user => {
-            if (user) {
-                if (user.password === password) {
-                    res.json("Success")
-                } else {
-                    res.json("Password is incorrect")
-                }
-            } else {
-                res.json("No record found")
-            }
-        })
+    try {
+        const user = await User.findOne({ email })
+        if (user) {
+            return res.json({ userId: user._id });
+        } else {
+            return res.json("User does not exist")
+        }
+    } catch (error) {
+        console.error(e);
+        return res.status(500).json(err);
+    }
 });
 
 module.exports = router;
