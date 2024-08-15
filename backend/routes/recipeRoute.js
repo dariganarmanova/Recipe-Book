@@ -13,19 +13,23 @@ router.get('/:userId', async (req, res) => {
     }
 });
 
-router.post('/home', async (req, res) => {
+router.post('/', async (req, res) => {
     const { userId, ingredients } = req.body;
-    const newIngredient = new Recipe({
-        userId,
+    if (!userId || !ingredients) {
+        return res.status(400).json({ message: "User ID and ingredients are required" });
+    }
+    const newRecipe = new Recipe({
+        user: userId,
         ingredients
     });
     try {
-        const savedIngredient = await newIngredient.save();
-        res.status(201).json(savedIngredient);
+        const savedRecipe = await newRecipe.save();
+        res.status(201).json(savedRecipe);
     } catch (error) {
-        res.status(500).json({ message: "Couln't create the item", error });
+        res.status(500).json({ message: "Couldn't create the item", error });
     }
-})
+});
+
 
 router.delete('/:id', async (req, res) => {
     try {

@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 app.use('/api', auth);
 
 // Use the recipe routes without any prefix
-app.use('/recipe', recipeRoutes);
+app.use('/home', recipeRoutes);
 
 app.listen(8002, () => {
     console.log("Server is running on port 8002");
