@@ -3,6 +3,7 @@ const { connectToDatabase } = require('./db/mongoose');
 const cors = require('cors');
 const auth = require('./routes/auth');
 const recipeRoutes = require('./routes/recipeRoute');
+const aiRoute = require('./routes/aiRoute');
 
 const app = express();
 app.use(express.json());
@@ -20,6 +21,8 @@ app.use('/api', auth);
 
 // Use the recipe routes without any prefix
 app.use('/home', recipeRoutes);
+
+app.use('/', aiRoute);
 
 app.listen(8002, () => {
     console.log("Server is running on port 8002");

@@ -25,41 +25,9 @@ router.post('/', async (req, res) => {
     try {
         const savedRecipe = await newRecipe.save();
         res.status(201).json(savedRecipe);
+        res.redirect(`/recipe?recipeId=${savedRecipe._id}&userId=${userId}`);
     } catch (error) {
         res.status(500).json({ message: "Couldn't create the item", error });
     }
 });
-
-
-router.delete('/:id', async (req, res) => {
-    try {
-        const deletedItem = await Recipe.findByIdAndDelete(req.params.id);
-        if (!deletedItem) {
-            return res.status(404).json({ message: "Item not found" });
-        }
-        res.status(200).json(deletedItem);
-    } catch (error) {
-        res.status(500).json({ message: "Could not delete the item", error });
-
-    }
-});
-
-router.put('/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { ingredients } = req.body;
-        const updatedRecipe = await Recipe.findByIdAndUpdate(
-            id,
-            { ingredients },
-            { new: true } // Ensure `new` is included in options
-        );
-        if (!updatedRecipe) {
-            return res.status(404).json({ message: "Item not found" });
-        }
-        res.status(200).json(updatedRecipe);
-    } catch (error) {
-        res.status(500).json({ message: "Error updating the item", error });
-    }
-});
-
 module.exports = router;
